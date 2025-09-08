@@ -1,0 +1,39 @@
+class Solution {
+    public boolean check(int n1 , int n2)
+    {
+        int count1 = 0 , count2 = 0;
+        while(n1 > 0)
+        {  
+            int d = n1 % 10; 
+            if(d == 0) return false ;
+            n1 /= 10; 
+            count1 ++ ;
+        }
+        while(n2 > 0)
+        {   int d  = n2 % 10; 
+            if(d == 0) return false;
+            n2 /= 10; 
+            count2 ++ ;
+        }
+       
+        return true;
+    }
+    public int[] getNoZeroIntegers(int n) {
+      int[] arr = new int[2]; 
+        for(int i=1; i<n ;i++)
+        {
+            int t = n-i; 
+            if(check(t,i) && (t+i == n))
+            {
+                arr[0] = i ;
+                arr[1] = t ;
+                break; 
+            }
+        }
+        return arr;
+    }
+}
+
+
+
+// TC: N * (logN)
