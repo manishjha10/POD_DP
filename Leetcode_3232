@@ -1,0 +1,36 @@
+class Solution {
+    public boolean canAliceWin(int[] nums) {
+        // 2 digits  are here only 1 and 2  so  think accordingly. 
+        int Alice_sum1 =0; 
+        int Alice_sum2 =0; 
+        int bob_sum = 0 ;
+        
+        //  Alice Selection. 
+        for(int e: nums)
+        {
+            if(e/10 == 0)
+            {
+                Alice_sum1 += e; //10
+            }
+            else if(e/100 == 0)
+            {
+                Alice_sum2 += e; 
+            }
+        }
+       
+    if(Alice_sum1 >= Alice_sum2)
+    {
+        bob_sum = Alice_sum2;
+    }
+    else if(Alice_sum1 < Alice_sum2)
+    {
+        bob_sum = Alice_sum1;
+    }
+
+    if(Alice_sum1 > bob_sum || Alice_sum2 > bob_sum)
+    {
+        return true; 
+    }
+     return false ;
+    }
+}
