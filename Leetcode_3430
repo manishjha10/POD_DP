@@ -1,0 +1,80 @@
+// Brute force :   Main Concet in these at most k :  condition : (j - i + 1 <=k)
+class Solution {
+    public long minMaxSubarraySum(int[] nums, int k) {
+        int n = nums.length; 
+        long sum = 0; 
+
+        for(int i=0; i<n; i++)
+        {   long max = Long.MIN_VALUE; 
+            long min = Long.MAX_VALUE;  
+            for(int j=i; j<n && j-i+1 <=k ; j++)
+            {
+                min = Math.min(min,nums[j]); 
+                max = Math.max(max, nums[j]); 
+                sum += min + max;
+            }
+        }
+        return sum; 
+    }
+}
+
+// optimize:  stack
+class Solution {
+    public long minMaxSubarraySum(int[] nums, int k) {
+        int n = nums.length;
+        int[] ple = new int[n], nle = new int[n], pge = new int[n], nge = new int[n];
+
+        ArrayDeque<Integer> st = new ArrayDeque<>();
+
+        for (int i = 0; i < n; i++) {
+            while (!st.isEmpty() && nums[st.peek()] > nums[i]) st.pop();
+            ple[i] = st.isEmpty() ? -1 : st.peek();
+            st.push(i);
+        }
+
+        st.clear();
+        for (int i = n - 1; i >= 0; i--) {
+            while (!st.isEmpty() && nums[st.peek()] >= nums[i]) st.pop();
+            nle[i] = st.isEmpty() ? n : st.peek();
+            st.push(i);
+        }
+
+        st.clear();
+        for (int i = 0; i < n; i++) {
+            while (!st.isEmpty() && nums[st.peek()] < nums[i]) st.pop();
+            pge[i] = st.isEmpty() ? -1 : st.peek();
+            st.push(i);
+        }
+
+        st.clear();
+        for (int i = n - 1; i >= 0; i--) {
+            while (!st.isEmpty() && nums[st.peek()] <= nums[i]) st.pop();
+            nge[i] = st.isEmpty() ? n : st.peek();
+            st.push(i);
+        }
+
+        long ans = 0;
+
+        for (int i = 0; i < n; i++) {
+            long leftMin = i - ple[i];
+            long rightMin = nle[i] - i;
+            long leftMax = i - pge[i];
+            long rightMax = nge[i] - i;
+
+            ans += nums[i] * count(leftMax, rightMax, k);
+            ans += nums[i] * count(leftMin, rightMin, k);
+        }
+
+        return ans;
+    }
+
+    private long count(long L, long R, int k) {
+        long total = 0;
+        long maxL = Math.min(L, k); // starting
+        for (long l = 1; l <= maxL; l++) {
+            long r = Math.min(R, k - l + 1);
+            if (r > 0) total += r;
+        }
+        return total;
+    }
+}
